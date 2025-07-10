@@ -1,6 +1,9 @@
 import 'src/global.css';
 
+import { useState, useEffect } from 'react';
+
 import Fab from '@mui/material/Fab';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { Router } from 'src/routes/sections';
 
@@ -8,37 +11,40 @@ import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
 import { ThemeProvider } from 'src/theme/theme-provider';
 
-import { Iconify } from 'src/components/iconify';
-
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
 
-  const githubButton = (
+  const [showScroll, setShowScroll] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScroll(window.pageYOffset > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToTopButton = showScroll && (
     <Fab
-      size="medium"
-      aria-label="Github"
-      href="https://github.com/minimal-ui-kit/material-kit-react"
-      sx={{
-        zIndex: 9,
-        right: 20,
-        bottom: 20,
-        width: 44,
-        height: 44,
-        position: 'fixed',
-        bgcolor: 'grey.800',
-        color: 'common.white',
-      }}
+      color="primary"
+      size="small"
+      onClick={handleScrollToTop}
+      sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 9999 }}
     >
-      <Iconify width={24} icon="eva:github-fill" />
+      <KeyboardArrowUpIcon />
     </Fab>
   );
 
   return (
     <ThemeProvider>
       <Router />
-      {githubButton}
+      {scrollToTopButton}
     </ThemeProvider>
   );
 }

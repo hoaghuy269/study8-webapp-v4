@@ -13,9 +13,23 @@ import { fToNow } from 'src/utils/format-time';
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 
-import type { PostItemProps } from '../blog/post-item';
-
 // ----------------------------------------------------------------------
+
+type PostItemProps = {
+    id: string;
+    title: string;
+    coverUrl: string;
+    totalViews: number;
+    description: string;
+    totalShares: number;
+    totalComments: number;
+    totalFavorites: number;
+    postedAt: string | number | null;
+    author: {
+        name: string;
+        avatarUrl: string;
+    };
+};
 
 type Props = CardProps & {
   title?: string;
