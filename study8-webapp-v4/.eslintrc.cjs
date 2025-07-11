@@ -93,7 +93,7 @@ module.exports = {
         'custom-groups': {
           value: {
             ['custom-mui']: '@mui/**',
-            ['custom-auth']: 'src/auth/**',
+            ['custom-auth']: 'src/sign-in/**',
             ['custom-hooks']: 'src/hooks/**',
             ['custom-utils']: 'src/utils/**',
             ['custom-types']: 'src/types/**',
