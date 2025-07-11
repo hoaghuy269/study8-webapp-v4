@@ -1,1 +1,0 @@
-export const ACCEPT_LANGUAGE = 'accept-language';
