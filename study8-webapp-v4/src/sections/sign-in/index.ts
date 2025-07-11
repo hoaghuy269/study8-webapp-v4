@@ -1,1 +1,1 @@
-export * from './views/sign-in-view';
+export * from './view/sign-in-view';
