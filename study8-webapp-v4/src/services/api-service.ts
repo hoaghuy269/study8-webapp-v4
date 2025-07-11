@@ -19,8 +19,6 @@ export const apiService = {
         ),
 };
 
-
-
 const handleRequest = async <T>(request: Promise<any>): Promise<T> => {
     try {
         const response = await request;
