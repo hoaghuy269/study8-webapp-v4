@@ -11,15 +11,15 @@ import { SnackbarProvider } from './components/snackbar/snackbar-provider';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <StrictMode>
-    <HelmetProvider>
-      <SnackbarProvider>
-        <BrowserRouter>
-          <Suspense>
-            <App />
-          </Suspense>
-        </BrowserRouter>
-      </SnackbarProvider>
-    </HelmetProvider>
-  </StrictMode>
+  // <StrictMode>
+  <HelmetProvider>
+    <SnackbarProvider>
+      <BrowserRouter>
+        <Suspense>
+          <App />
+        </Suspense>
+      </BrowserRouter>
+    </SnackbarProvider>
+  </HelmetProvider>
+  // </StrictMode>
 );
