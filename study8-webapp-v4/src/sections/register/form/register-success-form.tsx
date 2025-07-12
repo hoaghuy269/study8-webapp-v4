@@ -1,49 +1,72 @@
 import { t } from 'i18next';
+import { motion } from 'framer-motion';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { green } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 
 import { useRouter } from '../../../routes/hooks';
+
+const MotionBox = motion(Box);
+const MotionTypography = motion(Typography);
+const MotionButton = motion(Button);
 
 const RegisterSuccessForm = () => {
   const router = useRouter();
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" textAlign="center" mt={5}>
-      <Box
+    <Box display="flex" flexDirection="column" alignItems="center" textAlign="center" mt={0}>
+      <MotionBox
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          width: 120,
-          height: 120,
+          width: 80,
+          height: 80,
           borderRadius: '50%',
           backgroundColor: green[50],
           boxShadow: 3,
         }}
       >
-        <CheckCircleRoundedIcon sx={{ fontSize: 80, color: green[600] }} />
-      </Box>
+        <SchoolRoundedIcon sx={{ fontSize: 50, color: green[600] }} />
+      </MotionBox>
 
-      <Typography variant="h5" sx={{ mt: 3, fontWeight: 'bold', color: green[600] }}>
+      <MotionTypography
+        variant="h5"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        sx={{ mt: 3, fontWeight: 'bold', color: green[600] }}
+      >
         {t('text.registerSuccess')}
-      </Typography>
+      </MotionTypography>
 
-      <Typography variant="body1" sx={{ mt: 1, color: 'text.secondary', maxWidth: 360 }}>
+      <MotionTypography
+        variant="body2"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, duration: 0.5 }}
+        sx={{ mt: 1, color: 'text.secondary', maxWidth: 360 }}
+      >
         {t('text.registerSuccessMessage')}
-      </Typography>
+      </MotionTypography>
 
-      <Button
+      <MotionButton
         variant="contained"
         color="primary"
-        sx={{ mt: 4, minWidth: 200 }}
         onClick={() => router.push('/sign-in')}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+        sx={{ mt: 4, minWidth: 200 }}
       >
         {t('button.goToLogin')}
-      </Button>
+      </MotionButton>
     </Box>
   );
 };
