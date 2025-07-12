@@ -1,21 +1,28 @@
+import type { SelectChangeEvent } from '@mui/material';
+
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import { LoadingButton } from '@mui/lab';
+import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import { Box, Tooltip, debounce, TextField, Autocomplete, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Select,
+  Tooltip,
+  TextField,
+  InputLabel,
+  FormControl,
+  FormHelperText,
+  CircularProgress,
+} from '@mui/material';
 
 import { AUTH } from '../../../constant/pattern';
 import { Iconify } from '../../../components/iconify';
 import { getRoles, registerSubmit } from '../service/service';
 import { useAlert, ALERT_SEVERITY } from '../../../hooks/use-alert';
-
-interface RoleOption {
-  value: string;
-  label: string;
-}
 
 type Props = {
   nextStep: () => void;
@@ -27,10 +34,6 @@ const RegisterForm = ({ nextStep, id }: Props) => {
   const { showSnackbar } = useAlert();
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
-  const [roleOptions, setRoleOptions] = useState<RoleOption[]>([]);
-  const [loadingRoles, setLoadingRoles] = useState(false);
-  const [fetchedRoles, setFetchedRoles] = useState(false);
-  const [, setSearchTerm] = useState('');
   const {
     register,
     handleSubmit,
@@ -39,27 +42,29 @@ const RegisterForm = ({ nextStep, id }: Props) => {
     formState: { errors },
   } = useForm();
   const password = watch('password');
+  const [roleOptions, setRoleOptions] = useState<{ value: string; label: string }[]>([]);
+  const [loadingRoles, setLoadingRoles] = useState(true);
 
-  const fetchRoles = async (search = '') => {
-    setLoadingRoles(true);
-    try {
-      const response = await getRoles(search);
-      const data = response?.datas || [];
-      setRoleOptions(
-        data.map((item: { code: any; value: any }) => ({ value: item.code, label: item.value }))
-      );
-      setFetchedRoles(true);
-    } catch (error) {
-      showSnackbar(error, ALERT_SEVERITY.ERROR);
-    } finally {
-      setLoadingRoles(false);
-    }
-  };
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const response = await getRoles('');
+        const data = response?.datas || [];
+        setRoleOptions(
+          data.map((item: { code: string; value: string }) => ({
+            value: item.code,
+            label: item.value,
+          }))
+        );
+      } catch (error) {
+        setRoleOptions([]);
+      } finally {
+        setLoadingRoles(false);
+      }
+    };
 
-  const handleSearchChange = debounce((event: any, newInputValue: string) => {
-    setSearchTerm(newInputValue);
-    fetchRoles(newInputValue);
-  }, 500);
+    fetchRoles();
+  }, []);
 
   const handleSubmitForm = async (data: any) => {
     try {
@@ -70,8 +75,8 @@ const RegisterForm = ({ nextStep, id }: Props) => {
 
       // Step 2: Go to next step
       nextStep();
-    } catch (error) {
-      showSnackbar(error, ALERT_SEVERITY.ERROR);
+    } catch (exception) {
+      showSnackbar(exception, ALERT_SEVERITY.ERROR);
     } finally {
       setLoading(false);
     }
@@ -96,34 +101,33 @@ const RegisterForm = ({ nextStep, id }: Props) => {
           control={control}
           rules={{ required: t('error.roleRequired') }}
           render={({ field }) => (
-            <Autocomplete
-              fullWidth
-              filterOptions={(x) => x}
-              options={roleOptions}
-              getOptionLabel={(option) => option.label}
-              isOptionEqualToValue={(option, value) => option.value === value.value}
-              onOpen={() => !fetchedRoles && fetchRoles()}
-              onInputChange={handleSearchChange}
-              onChange={(_, newValue) => field.onChange(newValue?.value || '')}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t('text.role')}
-                  placeholder={t('text.roleSelect')}
-                  error={!!errors.role}
-                  helperText={errors.role?.message as string}
-                  InputProps={{
-                    ...params.InputProps,
-                    endAdornment: loadingRoles ? (
-                      <CircularProgress size={20} />
-                    ) : (
-                      params.InputProps.endAdornment
-                    ),
-                  }}
-                />
-              )}
-              sx={{ mb: 3 }}
-            />
+            <FormControl fullWidth error={!!errors.role} sx={{ mb: 3 }}>
+              <InputLabel id="role-select-label">{t('text.role')}</InputLabel>
+              <Select
+                labelId="role-select-label"
+                id="role-select"
+                value={field.value || ''}
+                label={t('text.role')}
+                onChange={(event: SelectChangeEvent) => field.onChange(event.target.value)}
+                variant="outlined"
+              >
+                {loadingRoles ? (
+                  <MenuItem disabled>
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <CircularProgress size={16} />
+                      {t('text.loading')}
+                    </Box>
+                  </MenuItem>
+                ) : (
+                  roleOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))
+                )}
+              </Select>
+              <FormHelperText>{errors.role?.message as string}</FormHelperText>
+            </FormControl>
           )}
         />
 
