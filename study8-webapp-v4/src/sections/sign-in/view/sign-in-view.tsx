@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 import { Iconify } from 'src/components/iconify';
 
 import { signIn } from '../service/service';
-import {TOKEN} from "../../../libs/constants/local-storage";
+import { TOKEN } from '../../../libs/constants/local-storage';
 import { useAlert, ALERT_SEVERITY } from '../../../hooks/use-alert';
 
 export function SignInView() {
@@ -111,11 +111,15 @@ export function SignInView() {
   return (
     <>
       <Box gap={1.5} display="flex" flexDirection="column" alignItems="center" sx={{ mb: 5 }}>
-        <Typography variant="h5">Sign in</Typography>
+        <Typography variant="h5">{t('text.signIn')}</Typography>
         <Typography variant="body2" color="text.secondary">
-          Don’t have an account?
-          <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-            Get started
+          {t('text.dontHaveAccount')}
+          <Link
+            variant="subtitle2"
+            sx={{ ml: 0.5, cursor: 'pointer' }}
+            onClick={() => router.push('/register')}
+          >
+            {t('text.getStarted')}
           </Link>
         </Typography>
       </Box>
