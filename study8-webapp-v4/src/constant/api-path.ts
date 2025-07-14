@@ -11,3 +11,4 @@ export const API_LOGIN = `${API_V1}${API_AUTH}/login`;
 export const API_REGISTER = `${API_V1}${API_AUTH}/register`;
 
 export const API_CONSTANT_PUBLIC = `${API_V1}${API_SYS}${API_PUBLIC}/constant`;
+export const API_CONSTANT = `${API_V1}${API_SYS}/constant`;
