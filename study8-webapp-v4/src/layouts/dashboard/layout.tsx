@@ -1,6 +1,6 @@
 import type { Theme, SxProps, Breakpoint } from '@mui/material/styles';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
@@ -15,13 +15,19 @@ import { layoutClasses } from '../classes';
 import { NavMobile, NavDesktop } from './nav';
 import { navData } from '../config-nav-dashboard';
 import { Searchbar } from '../components/searchbar';
-import { _workspaces } from '../config-nav-workspace';
 import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
+import { apiService } from '../../services/api-service';
+import { API_CONSTANT_PUBLIC } from '../../constant/api-path';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+
+import type { ApiResponse } from '../../libs/types/api-response';
+import type { ConstantResponse } from '../../libs/types/constant-response';
+import type { WorkspacesPopoverProps } from '../components/workspaces-popover';
+import type { PaginationResponse } from '../../libs/types/pagination-response';
 
 // ----------------------------------------------------------------------
 
@@ -35,10 +41,28 @@ export type DashboardLayoutProps = {
 
 export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) {
   const theme = useTheme();
-
   const [navOpen, setNavOpen] = useState(false);
-
   const layoutQuery: Breakpoint = 'lg';
+  const [workspaces, setWorkspaces] = useState<WorkspacesPopoverProps['data']>([]);
+
+  useEffect(() => {
+    apiService
+      .get<ApiResponse<PaginationResponse<ConstantResponse>>>(
+        `${API_CONSTANT_PUBLIC}?groupCode=WORKSPACE`
+      )
+      .then((res) => {
+        const mapped = res.data.datas.map((item) => ({
+          id: item.code,
+          name: item.value,
+          logo: '',
+          plan: '',
+        }));
+        setWorkspaces(mapped);
+      })
+      .catch((err) => {
+        console.error('layout.tsx | Error', err);
+      });
+  }, []);
 
   return (
     <LayoutSection
@@ -74,7 +98,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
                   data={navData}
                   open={navOpen}
                   onClose={() => setNavOpen(false)}
-                  workspaces={_workspaces}
+                  workspaces={workspaces}
                 />
               </>
             ),
@@ -111,7 +135,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
        * Sidebar
        *************************************** */
       sidebarSection={
-        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={_workspaces} />
+        <NavDesktop data={navData} layoutQuery={layoutQuery} workspaces={workspaces} />
       }
       /** **************************************
        * Footer
