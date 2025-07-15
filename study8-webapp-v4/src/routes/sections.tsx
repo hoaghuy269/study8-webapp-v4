@@ -8,6 +8,7 @@ import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { DashboardLayout } from 'src/layouts/dashboard';
 
+import { WorkspaceProvider } from '../components/workspace/workspace-provider';
 import { UserProfileProvider } from '../components/user-profile/user-profile-provider';
 
 // ----------------------------------------------------------------------
@@ -38,11 +39,13 @@ export function Router() {
     {
       element: (
         <UserProfileProvider>
-          <DashboardLayout>
-            <Suspense fallback={renderFallback}>
-              <Outlet />
-            </Suspense>
-          </DashboardLayout>
+          <WorkspaceProvider>
+            <DashboardLayout>
+              <Suspense fallback={renderFallback}>
+                <Outlet />
+              </Suspense>
+            </DashboardLayout>
+          </WorkspaceProvider>
         </UserProfileProvider>
       ),
       children: [
