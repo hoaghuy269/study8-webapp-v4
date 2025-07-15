@@ -1,4 +1,3 @@
-import { Label } from 'src/components/label';
 import { SvgColor } from 'src/components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -11,6 +10,11 @@ export const navData = [
   {
     title: 'Dashboard',
     path: '/',
+    icon: icon('ic-analytics'),
+  },
+  {
+    title: 'Class',
+    path: '/class',
     icon: icon('ic-analytics'),
   },
 ];

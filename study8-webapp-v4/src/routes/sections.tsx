@@ -16,6 +16,7 @@ export const HomePage = lazy(() => import('src/pages/home'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
+export const ClassPage = lazy(() => import('src/pages/class'));
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,10 @@ export function Router() {
           </DashboardLayout>
         </UserProfileProvider>
       ),
-      children: [{ element: <HomePage />, index: true }],
+      children: [
+        { element: <HomePage />, index: true },
+        { element: <ClassPage />, path: 'class' },
+      ],
     },
     {
       path: 'sign-in',
