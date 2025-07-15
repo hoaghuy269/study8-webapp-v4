@@ -11,12 +11,18 @@ import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
 import { ThemeProvider } from 'src/theme/theme-provider';
 
+import { getLocale, setLocale } from './libs/locale/locale';
+
 // ----------------------------------------------------------------------
 
 export default function App() {
   useScrollToTop();
 
   const [showScroll, setShowScroll] = useState(false);
+
+  useEffect(() => {
+    setLocale(getLocale());
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

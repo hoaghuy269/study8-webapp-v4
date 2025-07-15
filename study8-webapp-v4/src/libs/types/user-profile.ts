@@ -3,4 +3,5 @@ export interface UserProfile {
   accountName: string;
   accountAvatarUrl: string;
   accountWorkspace: string;
+  language: string;
 }

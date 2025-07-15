@@ -4,9 +4,9 @@ import { initReactI18next } from 'react-i18next';
 import enTranslation from './i18n/en.json';
 import viTranslation from './i18n/vi.json';
 import {DEFAULT_LOCALE} from "./libs/locale/locale";
-import {ACCEPT_LANGUAGE} from "./libs/constants/local-storage";
+import {LOCALE} from "./libs/constants/local-storage";
 
-const storedLanguage = localStorage.getItem(ACCEPT_LANGUAGE) || DEFAULT_LOCALE;
+const storedLanguage = localStorage.getItem(LOCALE) || DEFAULT_LOCALE;
 
 i18n.use(initReactI18next).init({
   resources: {

@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import { useTheme } from '@mui/material/styles';
 
-import { _langs, _notifications } from 'src/_mock';
+import { _notifications } from 'src/_mock';
 
 import { Iconify } from 'src/components/iconify';
 
@@ -19,12 +19,14 @@ import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { apiService } from '../../services/api-service';
-import { API_CONSTANT_PUBLIC } from '../../constant/api-path';
 import { AccountPopover } from '../components/account-popover';
 import { LanguagePopover } from '../components/language-popover';
 import { NotificationsPopover } from '../components/notifications-popover';
+import { API_LANGUAGE, API_CONSTANT_PUBLIC } from '../../constant/api-path';
 
 import type { ApiResponse } from '../../libs/types/api-response';
+import type { LanguageResponse } from '../../libs/types/language-response';
+import type { LanguagePopoverProps } from '../components/language-popover';
 import type { ConstantResponse } from '../../libs/types/constant-response';
 import type { WorkspacesPopoverProps } from '../components/workspaces-popover';
 import type { PaginationResponse } from '../../libs/types/pagination-response';
@@ -44,6 +46,23 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
   const [navOpen, setNavOpen] = useState(false);
   const layoutQuery: Breakpoint = 'lg';
   const [workspaces, setWorkspaces] = useState<WorkspacesPopoverProps['data']>([]);
+  const [languages, setLanguages] = useState<LanguagePopoverProps['data']>([]);
+
+  useEffect(() => {
+    apiService
+      .get<ApiResponse<PaginationResponse<LanguageResponse>>>(API_LANGUAGE)
+      .then((res) => {
+        const mapped = res.data.datas.map((item) => ({
+          code: item.code,
+          name: item.name,
+          url: item.url,
+        }));
+        setLanguages(mapped);
+      })
+      .catch((err) => {
+        console.error('layout.tsx | Error', err);
+      });
+  }, []);
 
   useEffect(() => {
     apiService
@@ -105,7 +124,7 @@ export function DashboardLayout({ sx, children, header }: DashboardLayoutProps) 
             rightArea: (
               <Box gap={1} display="flex" alignItems="center">
                 <Searchbar />
-                <LanguagePopover data={_langs} />
+                <LanguagePopover data={languages} />
                 <NotificationsPopover data={_notifications} />
                 <AccountPopover
                   data={[
