@@ -11,6 +11,7 @@ import { useScrollToTop } from 'src/hooks/use-scroll-to-top';
 
 import { ThemeProvider } from 'src/theme/theme-provider';
 
+import i18n from './i18n';
 import { getLocale, setLocale } from './libs/locale/locale';
 
 // ----------------------------------------------------------------------
@@ -22,6 +23,7 @@ export default function App() {
 
   useEffect(() => {
     setLocale(getLocale());
+    i18n.changeLanguage(getLocale());
   }, []);
 
   useEffect(() => {
