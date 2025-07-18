@@ -1,4 +1,4 @@
 export const WORKSPACE = {
-  TEACHER: 'teacher',
-  STUDENT: 'student',
+  TEACHER: 'TEACHER',
+  STUDENT: 'STUDENT',
 };
