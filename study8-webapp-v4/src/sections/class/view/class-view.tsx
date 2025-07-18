@@ -3,13 +3,17 @@ import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Unstable_Grid2';
 import { CircularProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 import { getClasses } from '../service/service';
 import { useRouter } from '../../../routes/hooks';
 import { ClassItem } from '../component/class-item';
+import { WORKSPACE } from '../../../constant/workspace';
 import { useWorkspace } from '../../../hooks/use-workspace';
 import { DashboardContent } from '../../../layouts/dashboard';
 import {
@@ -71,6 +75,20 @@ export function ClassView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace, orderBy, search]);
 
+  const renderButton = () => (
+    <Box display="flex" alignItems="center" justifyContent="flex-end" mb={5}>
+      {workspace === WORKSPACE.TEACHER ? (
+        <Button variant="contained" color="inherit" startIcon={<AddIcon />}>
+          {t('button.createClass')}
+        </Button>
+      ) : (
+        <Button variant="contained" color="inherit" startIcon={<GroupAddIcon />}>
+          {t('button.joinClass')}
+        </Button>
+      )}
+    </Box>
+  );
+
   const renderClasses = () => {
     if (loading) {
       return (
@@ -119,5 +137,10 @@ export function ClassView() {
     );
   };
 
-  return <DashboardContent>{renderClasses()}</DashboardContent>;
+  return (
+    <DashboardContent>
+      {renderButton()}
+      {renderClasses()}
+    </DashboardContent>
+  );
 }
