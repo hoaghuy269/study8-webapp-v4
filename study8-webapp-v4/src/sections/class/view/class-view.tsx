@@ -12,7 +12,7 @@ import { useRouter } from '../../../routes/hooks';
 import { ClassItem } from '../component/class-item';
 import { useWorkspace } from '../../../hooks/use-workspace';
 import { DashboardContent } from '../../../layouts/dashboard';
-import { DEFAULT_SEARCH, DEFAULT_ORDER_BY, DEFAULT_PAGE_START } from '../../../constant/pagination';
+import {DEFAULT_SEARCH, DEFAULT_ORDER_BY, DEFAULT_PAGE_SIZE, DEFAULT_PAGE_START} from '../../../constant/pagination';
 
 import type { ClassResponse } from '../type/class-response';
 import type { ClassListRequest } from '../type/class-list-request';
@@ -33,7 +33,7 @@ export function ClassView() {
     try {
       const params: ClassListRequest = {
         page: page - 1,
-        size: 8,
+        size: DEFAULT_PAGE_SIZE,
         orderBy,
         search,
         workspace,
