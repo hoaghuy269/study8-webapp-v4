@@ -16,7 +16,8 @@ import {
   DEFAULT_SEARCH,
   DEFAULT_ORDER_BY,
   DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_START, DEFAULT_CIRCULAR_PROGRESS_SIZE,
+  DEFAULT_PAGE_START,
+  DEFAULT_CIRCULAR_PROGRESS_SIZE,
 } from '../../../constant/pagination';
 
 import type { ClassResponse } from '../type/class-response';
@@ -34,7 +35,6 @@ export function ClassView() {
   const [hasMore, setHasMore] = useState(true);
   const { workspace } = useWorkspace();
   const [loading, setLoading] = useState(true);
-
 
   const fetchClasses = async () => {
     try {
