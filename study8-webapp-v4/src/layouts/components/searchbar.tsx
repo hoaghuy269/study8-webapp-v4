@@ -15,12 +15,14 @@ import { bgBlur } from 'src/theme/styles';
 
 import { Iconify } from 'src/components/iconify';
 
+import { useSearch } from '../../hooks/use-search';
+
 // ----------------------------------------------------------------------
 
 export function Searchbar({ sx, ...other }: BoxProps) {
   const theme = useTheme();
-
   const [open, setOpen] = useState(false);
+  const { setSearch } = useSearch();
 
   const handleOpen = useCallback(() => {
     setOpen((prev) => !prev);
@@ -29,6 +31,10 @@ export function Searchbar({ sx, ...other }: BoxProps) {
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
@@ -63,6 +69,7 @@ export function Searchbar({ sx, ...other }: BoxProps) {
             {...other}
           >
             <Input
+              onChange={handleSearch}
               autoFocus
               fullWidth
               disableUnderline
