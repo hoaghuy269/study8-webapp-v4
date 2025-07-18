@@ -16,7 +16,7 @@ import {
   DEFAULT_SEARCH,
   DEFAULT_ORDER_BY,
   DEFAULT_PAGE_SIZE,
-  DEFAULT_PAGE_START,
+  DEFAULT_PAGE_START, DEFAULT_CIRCULAR_PROGRESS_SIZE,
 } from '../../../constant/pagination';
 
 import type { ClassResponse } from '../type/class-response';
@@ -33,9 +33,15 @@ export function ClassView() {
   const [search] = useState(DEFAULT_SEARCH);
   const [hasMore, setHasMore] = useState(true);
   const { workspace } = useWorkspace();
+  const [loading, setLoading] = useState(true);
+
 
   const fetchClasses = async () => {
     try {
+      if (page === DEFAULT_PAGE_START) {
+        setLoading(true);
+      }
+
       const params: ClassListRequest = {
         page: page - 1,
         size: DEFAULT_PAGE_SIZE,
@@ -52,6 +58,8 @@ export function ClassView() {
       }
     } catch (error) {
       setHasMore(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,6 +72,13 @@ export function ClassView() {
   }, [workspace, orderBy, search]);
 
   const renderClasses = () => {
+    if (loading) {
+      return (
+        <Box display="flex" justifyContent="center" alignItems="center" height="100vh" width="100%">
+          <CircularProgress size={DEFAULT_CIRCULAR_PROGRESS_SIZE} color="primary" />
+        </Box>
+      );
+    }
     if (classes.length === 0) {
       return (
         <Box display="flex" justifyContent="center" alignItems="center" height="100vh" width="100%">
@@ -80,7 +95,7 @@ export function ClassView() {
         hasMore={hasMore}
         loader={
           <Grid container justifyContent="center" sx={{ my: 2 }}>
-            <CircularProgress size={30} color="primary" />
+            <CircularProgress size={DEFAULT_CIRCULAR_PROGRESS_SIZE} color="primary" />
           </Grid>
         }
         style={{
