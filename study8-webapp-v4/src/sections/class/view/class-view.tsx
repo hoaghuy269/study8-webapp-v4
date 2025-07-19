@@ -78,11 +78,11 @@ export function ClassView() {
   const renderButton = () => (
     <Box display="flex" alignItems="center" justifyContent="flex-end" mb={5}>
       {workspace === WORKSPACE.TEACHER ? (
-        <Button variant="contained" color="inherit" startIcon={<AddIcon />}>
+        <Button variant="contained" startIcon={<AddIcon />}>
           {t('button.createClass')}
         </Button>
       ) : (
-        <Button variant="contained" color="inherit" startIcon={<GroupAddIcon />}>
+        <Button variant="contained" startIcon={<GroupAddIcon />}>
           {t('button.joinClass')}
         </Button>
       )}
