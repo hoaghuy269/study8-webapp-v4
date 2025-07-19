@@ -17,3 +17,4 @@ export const API_LANGUAGE = `${API_V1}${API_SYS}/language`;
 
 export const API_CLASS = `${API_V1}${API_BIZ}/class`;
 export const API_CLASS_LIST = `${API_V1}${API_BIZ}/class/list`;
+export const API_CLASS_JOIN = `${API_V1}${API_BIZ}/class/join`;

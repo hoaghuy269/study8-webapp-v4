@@ -1,5 +1,5 @@
 import {apiService} from "../../../services/api-service";
-import {API_CLASS, API_CLASS_LIST} from "../../../constant/api-path";
+import {API_CLASS, API_CLASS_JOIN, API_CLASS_LIST} from "../../../constant/api-path";
 
 import type {ClassResponse} from "../type/class-response";
 import type {ClassListRequest} from "../type/class-list-request";
@@ -23,6 +23,14 @@ export const getClasses = async (params: ClassListRequest) : Promise<PaginationR
         orderBy: params.orderBy,
         search: params.search,
         workspace: params.workspace,
+    });
+
+    return response.data;
+};
+
+export const joinClass = async (code: string) => {
+    const response = await apiService.post<ApiResponse<ClassResponse>>(API_CLASS_JOIN, {
+        code,
     });
 
     return response.data;

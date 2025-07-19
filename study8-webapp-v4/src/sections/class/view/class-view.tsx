@@ -16,6 +16,8 @@ import { ClassItem } from '../component/class-item';
 import { WORKSPACE } from '../../../constant/workspace';
 import { useWorkspace } from '../../../hooks/use-workspace';
 import { DashboardContent } from '../../../layouts/dashboard';
+import { JoinClassDialog } from '../dialog/join-class-dialog';
+import { CreateClassDialog } from '../dialog/create-class-dialog';
 import {
   DEFAULT_SEARCH,
   DEFAULT_ORDER_BY,
@@ -39,6 +41,10 @@ export function ClassView() {
   const [hasMore, setHasMore] = useState(true);
   const { workspace } = useWorkspace();
   const [loading, setLoading] = useState(true);
+  const [createClassDialog, setCreateClassDialog] = useState(false);
+  const [joinClassDialog, setJoinClassDialog] = useState(false);
+
+  // Dialog
 
   const fetchClasses = async () => {
     try {
@@ -78,15 +84,34 @@ export function ClassView() {
   const renderButton = () => (
     <Box display="flex" alignItems="center" justifyContent="flex-end" mb={5}>
       {workspace === WORKSPACE.TEACHER ? (
-        <Button variant="contained" startIcon={<AddIcon />}>
+        <Button
+          onClick={() => {
+            setCreateClassDialog(true);
+          }}
+          variant="contained"
+          startIcon={<AddIcon />}
+        >
           {t('button.createClass')}
         </Button>
       ) : (
-        <Button variant="contained" startIcon={<GroupAddIcon />}>
+        <Button
+          onClick={() => {
+            setJoinClassDialog(true);
+          }}
+          variant="contained"
+          startIcon={<GroupAddIcon />}
+        >
           {t('button.joinClass')}
         </Button>
       )}
     </Box>
+  );
+
+  const renderDialog = () => (
+    <>
+      <CreateClassDialog open={createClassDialog} handleClose={() => setCreateClassDialog(false)} />
+      <JoinClassDialog open={joinClassDialog} handleClose={() => setJoinClassDialog(false)} />
+    </>
   );
 
   const renderClasses = () => {
@@ -141,6 +166,7 @@ export function ClassView() {
     <DashboardContent>
       {renderButton()}
       {renderClasses()}
+      {renderDialog()}
     </DashboardContent>
   );
 }
