@@ -5,6 +5,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
+import Skeleton from '@mui/material/Skeleton';
 import Grid from '@mui/material/Unstable_Grid2';
 import { CircularProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -81,6 +82,18 @@ export function ClassView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace, orderBy, search]);
 
+  const renderSkeleton = () => (
+    <Grid container spacing={3}>
+      {[...Array(8)].map((_, index) => (
+        <Grid key={index} xs={12} sm={6} md={3}>
+          <Skeleton variant="rectangular" height={200} animation="wave" />
+          <Skeleton variant="text" />
+          <Skeleton variant="text" width="60%" />
+        </Grid>
+      ))}
+    </Grid>
+  );
+
   const renderButton = () => (
     <Box display="flex" alignItems="center" justifyContent="flex-end" mb={5}>
       {workspace === WORKSPACE.TEACHER ? (
@@ -116,11 +129,7 @@ export function ClassView() {
 
   const renderClasses = () => {
     if (loading) {
-      return (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh" width="100%">
-          <CircularProgress size={DEFAULT_CIRCULAR_PROGRESS_SIZE} color="primary" />
-        </Box>
-      );
+      return <Box px={3}>{renderSkeleton()}</Box>;
     }
     if (classes.length === 0) {
       return (
