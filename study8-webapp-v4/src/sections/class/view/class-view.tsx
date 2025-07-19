@@ -157,7 +157,7 @@ export function ClassView() {
           {classes.map((classItem) => (
             <Grid key={classItem.id} xs={12} sm={6} md={3}>
               <Box
-                onClick={() => router.push(`/class/detail/${classItem.id}`)}
+                onClick={() => router.push(`/class/${classItem.id}`)}
                 sx={{ cursor: 'pointer' }}
               >
                 <ClassItem latestPost={false} latestPostLarge={false} classItem={classItem} />

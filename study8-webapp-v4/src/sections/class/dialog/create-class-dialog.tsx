@@ -52,7 +52,7 @@ export const CreateClassDialog: FC<CreateClassDialogProps> = ({ open, handleClos
       const result = await createClass(data.name, data.description, data.publicFlag);
       if (result?.id) {
         handleClose();
-        router.push(`/class/detail/${result.id}`);
+        router.push(`/class/${result.id}`);
       }
     } catch (error) {
       showSnackbar(error, ALERT_SEVERITY.ERROR);
