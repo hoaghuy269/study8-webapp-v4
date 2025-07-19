@@ -20,13 +20,13 @@ axiosClient.interceptors.request.use((config) => {
 });
 
 // Unauthorized
-axiosClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem(TOKEN);
-      window.location.href = '/sign-in';
-    }
-    return Promise.reject(error);
-  }
-);
+// axiosClient.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       localStorage.removeItem(TOKEN);
+//       window.location.href = '/sign-in';
+//     }
+//     return Promise.reject(error);
+//   }
+// );
