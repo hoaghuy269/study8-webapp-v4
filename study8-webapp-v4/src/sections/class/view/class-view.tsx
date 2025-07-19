@@ -45,8 +45,6 @@ export function ClassView() {
   const [createClassDialog, setCreateClassDialog] = useState(false);
   const [joinClassDialog, setJoinClassDialog] = useState(false);
 
-  // Dialog
-
   const fetchClasses = async () => {
     try {
       if (page === DEFAULT_PAGE_START) {
