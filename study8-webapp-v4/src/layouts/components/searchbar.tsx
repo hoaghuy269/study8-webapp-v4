@@ -81,9 +81,6 @@ export function Searchbar({ sx, ...other }: BoxProps) {
               }
               sx={{ fontWeight: 'fontWeightBold' }}
             />
-            <Button variant="contained" onClick={handleClose}>
-              Search
-            </Button>
           </Box>
         </Slide>
       </div>
