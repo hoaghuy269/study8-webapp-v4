@@ -10,7 +10,6 @@ import { DashboardLayout } from 'src/layouts/dashboard';
 
 import { SearchProvider } from '../components/search/search-provider';
 import { WorkspaceProvider } from '../components/workspace/workspace-provider';
-import { UserProfileProvider } from '../components/user-profile/user-profile-provider';
 
 // ----------------------------------------------------------------------
 
@@ -40,17 +39,15 @@ export function Router() {
   return useRoutes([
     {
       element: (
-        <UserProfileProvider>
-          <WorkspaceProvider>
-            <SearchProvider>
-              <DashboardLayout>
-                <Suspense fallback={renderFallback}>
-                  <Outlet />
-                </Suspense>
-              </DashboardLayout>
-            </SearchProvider>
-          </WorkspaceProvider>
-        </UserProfileProvider>
+        <WorkspaceProvider>
+          <SearchProvider>
+            <DashboardLayout>
+              <Suspense fallback={renderFallback}>
+                <Outlet />
+              </Suspense>
+            </DashboardLayout>
+          </SearchProvider>
+        </WorkspaceProvider>
       ),
       children: [
         { element: <HomePage />, index: true },
