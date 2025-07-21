@@ -15,7 +15,7 @@ import {
   DialogContentText,
 } from '@mui/material';
 
-import { joinClass } from '../service/service';
+import { useClassService } from '../service/service';
 import { useAlert, ALERT_SEVERITY } from '../../../hooks/use-alert';
 
 interface JoinClassDialogProps {
@@ -27,6 +27,7 @@ export const JoinClassDialog: FC<JoinClassDialogProps> = ({ open, handleClose })
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { showSnackbar } = useAlert();
+  const { joinClass } = useClassService();
   const {
     register,
     handleSubmit,

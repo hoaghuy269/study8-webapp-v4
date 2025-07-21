@@ -18,8 +18,8 @@ import {
   DialogContentText,
 } from '@mui/material';
 
-import { createClass } from '../service/service';
 import { useRouter } from '../../../routes/hooks';
+import { useClassService } from '../service/service';
 import { useAlert, ALERT_SEVERITY } from '../../../hooks/use-alert';
 
 interface CreateClassDialogProps {
@@ -32,6 +32,7 @@ export const CreateClassDialog: FC<CreateClassDialogProps> = ({ open, handleClos
   const router = useRouter();
   const { showSnackbar } = useAlert();
   const [loading, setLoading] = useState(false);
+  const { createClass } = useClassService();
   const {
     register,
     handleSubmit,

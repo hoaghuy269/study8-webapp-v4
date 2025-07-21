@@ -11,8 +11,8 @@ import { CircularProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
-import { getClasses } from '../service/service';
 import { useRouter } from '../../../routes/hooks';
+import { useClassService} from '../service/service';
 import { ClassItem } from '../component/class-item';
 import { WORKSPACE } from '../../../constant/workspace';
 import { useWorkspace } from '../../../hooks/use-workspace';
@@ -44,6 +44,7 @@ export function ClassView() {
   const [loading, setLoading] = useState(true);
   const [createClassDialog, setCreateClassDialog] = useState(false);
   const [joinClassDialog, setJoinClassDialog] = useState(false);
+  const { getClasses } = useClassService();
 
   const fetchClasses = async () => {
     try {
