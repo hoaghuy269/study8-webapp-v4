@@ -1,0 +1,1 @@
+export const UNAUTHORIZED = 'Full authentication is required to access this resource';
