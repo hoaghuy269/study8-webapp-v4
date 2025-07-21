@@ -13,6 +13,7 @@ import { ThemeProvider } from 'src/theme/theme-provider';
 
 import i18n from './i18n';
 import { getLocale, setLocale } from './libs/locale/locale';
+import { UserProfileProvider } from './components/user-profile/user-profile-provider';
 
 // ----------------------------------------------------------------------
 
@@ -51,8 +52,10 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <Router />
-      {scrollToTopButton}
+      <UserProfileProvider>
+        <Router />
+        {scrollToTopButton}
+      </UserProfileProvider>
     </ThemeProvider>
   );
 }
