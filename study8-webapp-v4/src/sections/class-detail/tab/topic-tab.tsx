@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
+import Skeleton from '@mui/material/Skeleton';
 import TextField from '@mui/material/TextField';
 import { CircularProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
@@ -17,6 +18,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 import { assignments } from '../../../_mock';
+import { TopicItem } from '../component/topic-item';
 import { useClassDetailService } from '../service/service';
 import { useUserProfile } from '../../../hooks/use-user-profile';
 import {
@@ -81,6 +83,38 @@ export function TopicTab(props: TopicTabProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
+  const renderSkeleton = () => (
+    <>
+      {[...Array(3)].map((_, index) => (
+        <Box
+          key={index}
+          sx={{
+              mt: 2,
+            p: 2,
+            mb: 2,
+            backgroundColor: 'background.paper',
+            borderRadius: 2,
+            boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+          }}
+        >
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <Skeleton variant="circular" width={48} height={48} />
+            </Grid>
+            <Grid item xs>
+              <Skeleton variant="text" width="40%" height={24} />
+              <Skeleton variant="text" width="30%" height={20} />
+            </Grid>
+          </Grid>
+
+          <Skeleton variant="text" width="80%" height={28} sx={{ mt: 2 }} />
+          <Skeleton variant="text" width="95%" height={24} />
+          <Skeleton variant="text" width="60%" height={24} />
+        </Box>
+      ))}
+    </>
+  );
+
   const renderCard = () => (
     <Grid container spacing={1}>
       <Grid item xs={12} sm={3} order={{ xs: 0, sm: 0 }}>
@@ -89,11 +123,16 @@ export function TopicTab(props: TopicTabProps) {
       </Grid>
       <Grid item xs={12} sm={9}>
         {renderCreateTopicCard()}
+        {renderTopics()}
       </Grid>
     </Grid>
   );
 
-  const renderTopics = () => (
+  const renderTopics = () => {
+    if (loadingPosts) {
+      return renderSkeleton();
+    }
+    return (
       <InfiniteScroll
         dataLength={posts.length}
         next={fetchPosts}
@@ -108,9 +147,14 @@ export function TopicTab(props: TopicTabProps) {
           overflow: 'hidden',
         }}
       >
-        Loren ipsum
+        {posts.map((post) => (
+          <Box sx={{ mt: 2 }} key={post.id}>
+            <TopicItem post={post} />
+          </Box>
+        ))}
       </InfiniteScroll>
     );
+  };
 
   const renderCreateTopicCard = () => (
     <Box
