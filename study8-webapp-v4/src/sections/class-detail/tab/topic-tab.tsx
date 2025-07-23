@@ -27,6 +27,18 @@ export function TopicTab(props: TopicTabProps) {
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
 
+  const renderCard = () => (
+    <Grid container spacing={1}>
+      <Grid item xs={12} sm={3} order={{ xs: 0, sm: 0 }}>
+        {renderClassDetailCard()}
+        {renderExerciseCard()}
+      </Grid>
+      <Grid item xs={12} sm={9}>
+        {renderCreateTopicCard()}
+      </Grid>
+    </Grid>
+  );
+
   const renderCreateTopicCard = () => (
     <Box
       component="section"
@@ -96,18 +108,6 @@ export function TopicTab(props: TopicTabProps) {
         </Grid>
       </Grid>
     </Box>
-  );
-
-  const renderCard = () => (
-    <Grid container spacing={1}>
-      <Grid item xs={12} sm={3} order={{ xs: 0, sm: 0 }}>
-        {renderClassDetailCard()}
-        {renderExerciseCard()}
-      </Grid>
-      <Grid item xs={12} sm={9}>
-        {renderCreateTopicCard()}
-      </Grid>
-    </Grid>
   );
 
   const renderExerciseCard = () => (
