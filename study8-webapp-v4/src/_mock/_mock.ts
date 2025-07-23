@@ -230,3 +230,8 @@ export const _productNames = (index: number) =>
     'Nike React Art3mis',
     'Nike React Infinity Run Flyknit A.I.R. Chaz Bear',
   ][index];
+
+export const assignments = [
+    { id: 1, title: 'Bài tập Toán', deadline: '2025-04-01' },
+    { id: 2, title: 'Bài tập Lý', deadline: '2025-04-03' },
+];
