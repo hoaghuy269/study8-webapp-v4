@@ -3,12 +3,18 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import { blue } from '@mui/material/colors';
+import Avatar from '@mui/material/Avatar';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import { red, blue, green } from '@mui/material/colors';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 import { assignments } from '../../../_mock';
+import { useUserProfile } from '../../../hooks/use-user-profile';
 
 import type { ClassResponse } from '../../class/type/class-response';
 
@@ -19,12 +25,87 @@ export type TopicTabProps = {
 export function TopicTab(props: TopicTabProps) {
   const { classDetail } = props;
   const { t } = useTranslation();
+  const { userProfile } = useUserProfile();
+
+  const renderCreateTopicCard = () => (
+    <Box
+      component="section"
+      sx={{
+        p: 2,
+        backgroundColor: 'background.paper',
+        borderRadius: 2,
+        boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+      }}
+    >
+      <Grid
+        container
+        spacing={2}
+        alignItems="center"
+        direction={{ xs: 'row', sm: 'row' }}
+        wrap="nowrap"
+      >
+        <Grid item>
+          <Avatar sx={{ width: 48, height: 48 }} src={userProfile?.accountAvatarUrl} />
+        </Grid>
+
+        <Grid item sx={{ flexGrow: 1 }}>
+          <TextField
+            fullWidth
+            placeholder={t('text.announceSomethingToClass')}
+            variant="outlined"
+            size="small"
+            multiline
+            minRows={1}
+            maxRows={5}
+            InputProps={{
+              readOnly: true,
+              sx: { cursor: 'pointer' },
+            }}
+            // onClick={handleOpenCreateTopicDialog}
+            inputProps={{
+              style: { cursor: 'pointer' },
+            }}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={3} sx={{ mt: 2 }} justifyContent="center">
+        <Grid item>
+          <Button
+            color="inherit"
+            startIcon={<DescriptionOutlinedIcon sx={{ color: green[500] }} />}
+          >
+            <Typography variant="body2" fontWeight={500}>
+              {t('text.photoAndDocument')}
+            </Typography>
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button color="inherit" startIcon={<EventNoteIcon sx={{ color: blue[500] }} />}>
+            <Typography variant="body2" fontWeight={500}>
+              {t('text.exercise')}
+            </Typography>
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button color="inherit" startIcon={<EventAvailableIcon sx={{ color: red[500] }} />}>
+            <Typography variant="body2" fontWeight={500}>
+              {t('text.event')}
+            </Typography>
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
+  );
 
   const renderCard = () => (
     <Grid container spacing={1}>
       <Grid item xs={12} sm={3} order={{ xs: 0, sm: 0 }}>
         {renderClassDetailCard()}
         {renderExerciseCard()}
+      </Grid>
+      <Grid item xs={12} sm={9}>
+        {renderCreateTopicCard()}
       </Grid>
     </Grid>
   );
