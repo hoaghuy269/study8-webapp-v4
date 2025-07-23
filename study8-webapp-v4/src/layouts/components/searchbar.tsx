@@ -1,11 +1,11 @@
 import type { BoxProps } from '@mui/material/Box';
 
-import { useState, useCallback } from 'react';
+import debounce from 'lodash/debounce';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
 import Box from '@mui/material/Box';
 import Slide from '@mui/material/Slide';
 import Input from '@mui/material/Input';
-import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -32,9 +32,24 @@ export function Searchbar({ sx, ...other }: BoxProps) {
     setOpen(false);
   }, []);
 
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+      }, 500),
+    [setSearch]
+  );
+
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
+    debouncedSearch(event.target.value);
   };
+
+  useEffect(
+    () => () => {
+      debouncedSearch.cancel();
+    },
+    [debouncedSearch]
+  );
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
