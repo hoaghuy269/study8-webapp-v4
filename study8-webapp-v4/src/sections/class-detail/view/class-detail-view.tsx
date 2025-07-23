@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+import {TopicTab} from "../tab/topic-tab";
 import { useRouter } from '../../../routes/hooks';
 import { Iconify } from '../../../components/iconify';
 import { useClassDetailService } from '../service/service';
@@ -56,7 +57,7 @@ export function ClassDetailView() {
           <Tab label={t('text.member')} value="member" />
         </Tabs>
         <TabPanel value="topic" sx={{ p: 0, mt: 3 }}>
-          123
+          <TopicTab classDetail={classDetail} />
         </TabPanel>
         <TabPanel value="member" sx={{ p: 0, mt: 3 }}>
           123
