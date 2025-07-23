@@ -1,8 +1,11 @@
-import { API_CLASS } from '../../../constant/api-path';
 import { useApiService } from '../../../hooks/use-api-service';
+import {API_CLASS, API_POST_LIST} from '../../../constant/api-path';
 
+import type {PostResponse} from "../type/post-response";
+import type {PostListRequest} from "../type/post-list-request";
 import type { ApiResponse } from '../../../libs/types/api-response';
 import type { ClassResponse } from '../../class/type/class-response';
+import type {PaginationResponse} from "../../../libs/types/pagination-response";
 
 export function useClassDetailService() {
   const { get } = useApiService();
@@ -12,7 +15,21 @@ export function useClassDetailService() {
     return response?.data;
   };
 
+  const getPosts = async (
+      params: PostListRequest
+  ): Promise<PaginationResponse<PostResponse> | undefined> => {
+    const response = await get<ApiResponse<PaginationResponse<PostResponse>>>(API_POST_LIST, {
+      page: params.page,
+      size: params.size,
+      orderBy: params.orderBy,
+      search: params.search,
+      classId: params.classId,
+    });
+    return response?.data;
+  };
+
   return {
     getClassDetail,
+    getPosts,
   };
 }

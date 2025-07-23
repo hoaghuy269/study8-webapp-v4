@@ -1,10 +1,13 @@
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
+import { CircularProgress } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { red, blue, green } from '@mui/material/colors';
@@ -14,8 +17,18 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 import { assignments } from '../../../_mock';
+import { useClassDetailService } from '../service/service';
 import { useUserProfile } from '../../../hooks/use-user-profile';
+import {
+  DEFAULT_SEARCH,
+  DEFAULT_ORDER_BY,
+  DEFAULT_PAGE_SIZE,
+  DEFAULT_PAGE_START,
+  DEFAULT_CIRCULAR_PROGRESS_SIZE,
+} from '../../../constant/pagination';
 
+import type { PostResponse } from '../type/post-response';
+import type { PostListRequest } from '../type/post-list-request';
 import type { ClassResponse } from '../../class/type/class-response';
 
 export type TopicTabProps = {
@@ -26,6 +39,47 @@ export function TopicTab(props: TopicTabProps) {
   const { classDetail } = props;
   const { t } = useTranslation();
   const { userProfile } = useUserProfile();
+  const { getPosts } = useClassDetailService();
+  const [page, setPage] = useState(DEFAULT_PAGE_START);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [search] = useState(DEFAULT_SEARCH);
+  const [posts, setPosts] = useState<PostResponse[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+
+  const fetchPosts = async () => {
+    try {
+      if (page === DEFAULT_PAGE_START) {
+        setLoadingPosts(true);
+      }
+
+      const params: PostListRequest = {
+        page: page - 1,
+        size: DEFAULT_PAGE_SIZE,
+        orderBy: DEFAULT_ORDER_BY,
+        search,
+        classId: classDetail?.id,
+      };
+
+      const response = await getPosts(params);
+      if (response) {
+        setPosts((prev) => [...prev, ...response.datas]);
+        setHasMore(posts.length + response.datas.length < response.totalData);
+        setPage((prevPage) => prevPage + 1);
+      }
+    } catch (error) {
+      setHasMore(false);
+    } finally {
+      setLoadingPosts(false);
+    }
+  };
+
+  useEffect(() => {
+    setPosts([]);
+    setPage(DEFAULT_PAGE_START);
+    setHasMore(true);
+    fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
 
   const renderCard = () => (
     <Grid container spacing={1}>
@@ -38,6 +92,25 @@ export function TopicTab(props: TopicTabProps) {
       </Grid>
     </Grid>
   );
+
+  const renderTopics = () => (
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={fetchPosts}
+        hasMore={hasMore}
+        loader={
+          <Grid container justifyContent="center" sx={{ my: 2 }}>
+            <CircularProgress size={DEFAULT_CIRCULAR_PROGRESS_SIZE} color="primary" />
+          </Grid>
+        }
+        style={{
+          height: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        Loren ipsum
+      </InfiniteScroll>
+    );
 
   const renderCreateTopicCard = () => (
     <Box
