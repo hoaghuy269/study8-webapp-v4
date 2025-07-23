@@ -1,8 +1,9 @@
 import { t } from 'i18next';
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
 import { Tab, Tabs } from '@mui/material';
 import Skeleton from '@mui/material/Skeleton';
 import { TabPanel, TabContext } from '@mui/lab';
@@ -10,8 +11,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
 import { useRouter } from '../../../routes/hooks';
-import { getClassDetail } from '../service/service';
 import { Iconify } from '../../../components/iconify';
+import { useClassDetailService } from '../service/service';
 import { DashboardContent } from '../../../layouts/dashboard';
 
 import type { ClassResponse } from '../../class/type/class-response';
@@ -24,6 +25,7 @@ export function ClassDetailView() {
   const [classLoading, setClassLoading] = useState(true);
   const [classDetail, setClassDetail] = useState<ClassResponse | null>(null);
   const [tab, setTab] = useState('topic');
+  const { getClassDetail } = useClassDetailService();
 
   useEffect(() => {
     const fetchClassDetail = async () => {
@@ -42,6 +44,7 @@ export function ClassDetailView() {
     };
 
     fetchClassDetail();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classId, router]);
 
   const renderSkeleton = () => (
@@ -82,12 +85,25 @@ export function ClassDetailView() {
     return (
       <Box display="flex" alignItems="center" mb={2}>
         <Typography variant="h5" flexGrow={1}>
-          <Link to="/class" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <Link
+            component="button"
+            variant="h5"
+            onClick={() => router.push('/class')}
+            sx={{
+              cursor: 'pointer',
+              color: 'primary.main',
+              textDecoration: 'underline',
+              '&:hover': { color: 'primary.dark' },
+            }}
+          >
             {t('text.class')}
           </Link>
-          {' > '}
-          <span style={{ color: '#888' }}>{classDetail?.name}</span>
+          <Typography variant="h5" component="span" color="text.secondary">
+            {' > '}
+            {classDetail?.name}
+          </Typography>
         </Typography>
+
         <IconButton onClick={() => alert('Mở cài đặt')}>
           <Iconify icon="mdi:cog" width="28px" color="#000" />
         </IconButton>
