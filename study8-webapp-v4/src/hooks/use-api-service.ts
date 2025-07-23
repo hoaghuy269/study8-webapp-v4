@@ -14,7 +14,7 @@ export function useApiService() {
       router.push('/sign-in');
       showSnackbar('Session expired', 'error');
     } else {
-      showSnackbar('Unexpected error occurred', 'error');
+      showSnackbar(error, 'error');
     }
 
     throw error;
