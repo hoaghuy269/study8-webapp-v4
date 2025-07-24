@@ -11,7 +11,7 @@ export function useClassService() {
 
   const getClasses = async (
     params: ClassListRequest
-  ): Promise<PaginationResponse<ClassResponse> | undefined> => {
+  ): Promise<PaginationResponse<ClassResponse> | null> => {
     const response = await get<ApiResponse<PaginationResponse<ClassResponse>>>(API_CLASS_LIST, {
       page: params.page,
       size: params.size,
@@ -26,7 +26,7 @@ export function useClassService() {
     name: string,
     description: string,
     publicFlag: boolean
-  ): Promise<ClassResponse | undefined> => {
+  ): Promise<ClassResponse | null> => {
     const response = await post<ApiResponse<ClassResponse>>(API_CLASS, {
       name,
       description,
@@ -35,7 +35,7 @@ export function useClassService() {
     return response?.data;
   };
 
-  const joinClass = async (code: string): Promise<ClassResponse | undefined> => {
+  const joinClass = async (code: string): Promise<ClassResponse | null> => {
     const response = await post<ApiResponse<ClassResponse>>(API_CLASS_JOIN, {
       code,
     });

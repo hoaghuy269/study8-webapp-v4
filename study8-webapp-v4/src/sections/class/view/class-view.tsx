@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
@@ -12,15 +12,15 @@ import Typography from '@mui/material/Typography';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 
 import { useRouter } from '../../../routes/hooks';
-import { useClassService} from '../service/service';
 import { ClassItem } from '../component/class-item';
+import { useClassService } from '../service/service';
+import { useSearch } from '../../../hooks/use-search';
 import { WORKSPACE } from '../../../constant/workspace';
 import { useWorkspace } from '../../../hooks/use-workspace';
 import { DashboardContent } from '../../../layouts/dashboard';
 import { JoinClassDialog } from '../dialog/join-class-dialog';
 import { CreateClassDialog } from '../dialog/create-class-dialog';
 import {
-  DEFAULT_SEARCH,
   DEFAULT_ORDER_BY,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGE_START,
@@ -38,7 +38,7 @@ export function ClassView() {
   const [classes, setClasses] = useState<ClassResponse[]>([]);
   const [page, setPage] = useState(DEFAULT_PAGE_START);
   const [orderBy] = useState(DEFAULT_ORDER_BY);
-  const [search] = useState(DEFAULT_SEARCH);
+  const { search } = useSearch();
   const [hasMore, setHasMore] = useState(true);
   const { workspace } = useWorkspace();
   const [loading, setLoading] = useState(true);
@@ -46,7 +46,9 @@ export function ClassView() {
   const [joinClassDialog, setJoinClassDialog] = useState(false);
   const { getClasses } = useClassService();
 
-  const fetchClasses = async () => {
+  const fetchClasses = useCallback(async () => {
+    if (!hasMore && page !== DEFAULT_PAGE_START) return;
+
     try {
       if (page === DEFAULT_PAGE_START) {
         setLoading(true);
@@ -62,8 +64,13 @@ export function ClassView() {
 
       const response = await getClasses(params);
       if (response) {
-        setClasses((prev) => [...prev, ...response.datas]);
-        setHasMore(classes.length + response.datas.length < response.totalData);
+        setClasses((prev) =>
+          page === DEFAULT_PAGE_START ? response.datas : [...prev, ...response.datas]
+        );
+        setHasMore(
+          (page === DEFAULT_PAGE_START ? 0 : classes.length) + response.datas.length <
+            response.totalData
+        );
         setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
@@ -71,15 +78,21 @@ export function ClassView() {
     } finally {
       setLoading(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, orderBy, search, workspace, hasMore, classes.length]);
 
   useEffect(() => {
     setClasses([]);
     setPage(DEFAULT_PAGE_START);
     setHasMore(true);
-    fetchClasses();
+  }, [search, workspace, orderBy]);
+
+  useEffect(() => {
+    if (page === DEFAULT_PAGE_START) {
+      fetchClasses();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [workspace, orderBy, search]);
+  }, [page]);
 
   const renderSkeleton = () => (
     <Grid container spacing={3}>
@@ -157,10 +170,7 @@ export function ClassView() {
         <Grid container spacing={3}>
           {classes.map((classItem) => (
             <Grid key={classItem.id} xs={12} sm={6} md={3}>
-              <Box
-                onClick={() => router.push(`/class/${classItem.id}`)}
-                sx={{ cursor: 'pointer' }}
-              >
+              <Box onClick={() => router.push(`/class/${classItem.id}`)} sx={{ cursor: 'pointer' }}>
                 <ClassItem latestPost={false} latestPostLarge={false} classItem={classItem} />
               </Box>
             </Grid>
