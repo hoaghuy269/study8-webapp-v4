@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
@@ -19,10 +19,10 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 import { assignments } from '../../../_mock';
 import { TopicItem } from '../component/topic-item';
+import { useSearch } from '../../../hooks/use-search';
 import { useClassDetailService } from '../service/service';
 import { useUserProfile } from '../../../hooks/use-user-profile';
 import {
-  DEFAULT_SEARCH,
   DEFAULT_ORDER_BY,
   DEFAULT_PAGE_SIZE,
   DEFAULT_PAGE_START,
@@ -44,11 +44,13 @@ export function TopicTab(props: TopicTabProps) {
   const { getPosts } = useClassDetailService();
   const [page, setPage] = useState(DEFAULT_PAGE_START);
   const [loadingPosts, setLoadingPosts] = useState(false);
-  const [search] = useState(DEFAULT_SEARCH);
+  const { search } = useSearch();
   const [posts, setPosts] = useState<PostResponse[]>([]);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
+    if (!hasMore && page !== DEFAULT_PAGE_START) return;
+
     try {
       if (page === DEFAULT_PAGE_START) {
         setLoadingPosts(true);
@@ -64,8 +66,13 @@ export function TopicTab(props: TopicTabProps) {
 
       const response = await getPosts(params);
       if (response) {
-        setPosts((prev) => [...prev, ...response.datas]);
-        setHasMore(posts.length + response.datas.length < response.totalData);
+        setPosts((prev) =>
+          page === DEFAULT_PAGE_START ? response.datas : [...prev, ...response.datas]
+        );
+        setHasMore(
+          (page === DEFAULT_PAGE_START ? 0 : posts.length) + response.datas.length <
+            response.totalData
+        );
         setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
@@ -73,15 +80,21 @@ export function TopicTab(props: TopicTabProps) {
     } finally {
       setLoadingPosts(false);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, search, classDetail?.id, hasMore, posts.length]);
 
   useEffect(() => {
     setPosts([]);
     setPage(DEFAULT_PAGE_START);
     setHasMore(true);
-    fetchPosts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
+
+  useEffect(() => {
+    if (page === DEFAULT_PAGE_START) {
+      fetchPosts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   const renderSkeleton = () => (
     <>
@@ -89,7 +102,7 @@ export function TopicTab(props: TopicTabProps) {
         <Box
           key={index}
           sx={{
-              mt: 2,
+            mt: 2,
             p: 2,
             mb: 2,
             backgroundColor: 'background.paper',
