@@ -19,6 +19,7 @@ import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 
 import { assignments } from '../../../_mock';
 import { TopicItem } from '../component/topic-item';
+import { TopicFile } from '../component/topic-file';
 import { useSearch } from '../../../hooks/use-search';
 import { useClassDetailService } from '../service/service';
 import { useUserProfile } from '../../../hooks/use-user-profile';
@@ -163,6 +164,7 @@ export function TopicTab(props: TopicTabProps) {
         {posts.map((post) => (
           <Box sx={{ mt: 2 }} key={post.id}>
             <TopicItem post={post} />
+            <TopicFile documentList={post.documentList} />
           </Box>
         ))}
       </InfiniteScroll>
