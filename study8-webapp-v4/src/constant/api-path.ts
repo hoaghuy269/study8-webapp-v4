@@ -20,3 +20,4 @@ export const API_CLASS_LIST = `${API_V1}${API_BIZ}/class/list`;
 export const API_CLASS_JOIN = `${API_V1}${API_BIZ}/class/join`;
 
 export const API_POST_LIST = `${API_V1}${API_BIZ}/post/list`;
+export const API_POST_DOCUMENT_GET = `${API_V1}${API_BIZ}/post/document`;

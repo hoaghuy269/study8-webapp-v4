@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import { CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
 
+import { TopicFile } from './topic-file';
 import { fRelative } from '../../../utils/format-time';
 import { DEFAULT_CONTENT_LINE } from '../../../constant/pagination';
 
@@ -31,6 +32,7 @@ export function TopicItem(props: TopicItemProps) {
       <CardContent>
         {renderAuthor()}
         {renderContent()}
+        <TopicFile documentList={post?.documentList ?? null} />
       </CardContent>
     </Card>
   );

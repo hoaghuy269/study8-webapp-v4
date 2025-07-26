@@ -164,7 +164,6 @@ export function TopicTab(props: TopicTabProps) {
         {posts.map((post) => (
           <Box sx={{ mt: 2 }} key={post.id}>
             <TopicItem post={post} />
-            <TopicFile documentList={post.documentList} />
           </Box>
         ))}
       </InfiniteScroll>
