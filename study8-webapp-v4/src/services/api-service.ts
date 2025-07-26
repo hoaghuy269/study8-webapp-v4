@@ -17,6 +17,13 @@ export const apiService = {
         },
       })
     ),
+
+  getBlob: (url: string) =>
+    handleBlobRequest(
+      axiosClient.get(url, {
+        responseType: 'blob',
+      })
+    ),
 };
 
 const handleRequest = async <T>(request: Promise<any>): Promise<T> => {
@@ -25,5 +32,14 @@ const handleRequest = async <T>(request: Promise<any>): Promise<T> => {
     return response.data as T;
   } catch (error: any) {
     throw error.response?.data?.message || 'Unexpected error';
+  }
+};
+
+const handleBlobRequest = async (request: Promise<any>): Promise<Blob> => {
+  try {
+    const response = await request;
+    return response.data as Blob;
+  } catch (error: any) {
+    throw error.response?.data?.message || 'Failed to fetch blob';
   }
 };

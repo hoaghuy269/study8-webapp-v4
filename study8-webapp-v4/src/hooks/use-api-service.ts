@@ -31,5 +31,7 @@ export function useApiService() {
 
     postFormData: <T>(url: string, formData: FormData) =>
       apiService.postFormData<T>(url, formData).catch(handleError),
+
+    getBlob: (url: string) => apiService.getBlob(url).catch(handleError),
   };
 }
